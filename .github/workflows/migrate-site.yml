@@ -1,0 +1,27 @@
+name: Copy original Unmyeongseo site
+on:
+  push:
+    paths:
+      - '.github/workflows/migrate-site.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Copy all public website files from previous repository
+        run: |
+          git clone --depth 1 https://github.com/nohseongeun/unmyeongseo-2027.git /tmp/unmyeongseo-source
+          rsync -a --exclude='.git' --exclude='.github' /tmp/unmyeongseo-source/ ./
+          touch .nojekyll
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Migrate complete public Unmyeongseo website and media"
+            git push origin HEAD:main
+          fi
