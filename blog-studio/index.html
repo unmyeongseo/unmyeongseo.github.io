@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0c1220">
+<title>렛미플레이 | 블로그 콘텐츠 스튜디오</title>
+<style>
+:root{font-family:system-ui,-apple-system,Apple SD Gothic Neo,"Malgun Gothic",sans-serif;color:#172235;background:#f3f6fc}*{box-sizing:border-box}
+body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.53;cursor:not-allowed}
+header{background:#111b30;color:white;padding:25px 24px}header .wrap{max-width:1180px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px}h1{font-size:23px;margin:0 0 5px;font-weight:850}header p{margin:0;color:#b7c8e8;font-size:13px}.brand{font-size:12px;color:#9dbaec;letter-spacing:.14em;font-weight:800}
+main{max-width:1180px;margin:26px auto;padding:0 18px 45px}.layout{display:grid;grid-template-columns:380px minmax(0,1fr);gap:22px;align-items:start}
+.panel{background:#fff;border:1px solid #e4e9f4;border-radius:16px;padding:22px;box-shadow:0 8px 28px #1f375512}.panel h2{font-size:17px;margin:0 0 15px}.stack{display:grid;gap:12px}
+label{font-size:13px;font-weight:750;color:#32445d;display:grid;gap:6px}input,select,textarea{display:block;width:100%;min-width:0;padding:11px 12px;border:1px solid #cfdaeb;border-radius:9px;background:#fff;color:#1d2d42;outline:none}input:focus,select:focus,textarea:focus{border-color:#467fdb;box-shadow:0 0 0 3px #467fdb22}textarea{resize:vertical;min-height:87px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;background:#2667c9;color:#fff;padding:13px 16px;border-radius:10px;font-weight:800;min-height:45px}.btn:hover{background:#1d56af}.btn.alt{background:#edf3ff;color:#235299}.btn.alt:hover{background:#e0edff}.btn.line{background:#fff;color:#325b95;border:1px solid #ccdbef}.btn.small{padding:8px 12px;min-height:34px;font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}.muted{font-size:12px;color:#61748b;line-height:1.65}.subtle{background:#eff4fc;border-radius:11px;padding:12px;font-size:12px;line-height:1.6;color:#4c6381}
+.status{font-size:13px;color:#315b94;min-height:19px} .status.error{color:#ae3842}
+.pill{background:#eaf0fc;border:1px solid #cdddf4;color:#285699;font-size:11px;font-weight:750;border-radius:50px;padding:5px 10px;white-space:nowrap}
+.preview{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #e4eaf4;border-radius:13px;padding:24px;line-height:1.9;background:#fff;min-height:340px;font-size:14px}
+.preview h3{font-size:22px;line-height:1.45;margin:0 0 20px;white-space:normal;color:#182b47}.preview h4{font-size:17px;line-height:1.4;margin:22px 0 8px;color:#204d86}.preview p{margin:9px 0;white-space:pre-wrap}.preview .placeholder{color:#8998ac;text-align:center;margin-top:115px}
+.grid-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.grid-head h2{margin:0}.counter{font-size:12px;color:#697b92}
+.history{display:flex;flex-direction:column;gap:7px;max-height:270px;overflow:auto}.history-item{border:1px solid #e2eaf5;background:#fbfcff;border-radius:8px;padding:10px 12px;text-align:left;color:#34485e}.history-item strong{display:block;font-size:13px}.history-item small{display:block;font-size:11px;color:#748397;margin-top:3px}
+.hint-title{font-size:12px;font-weight:800;color:#35517a;margin:20px 0 8px}.checkline{padding-left:19px;font-size:12px;line-height:1.7;color:#536b86}
+.topicbox{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0 3px}.topic{background:#f2f6ff;border:1px solid #dce6f5;color:#386195;font-size:12px;border-radius:7px;padding:7px 9px}.topic:hover{background:#e6efff}
+footer{text-align:center;color:#7a899b;font-size:12px;padding:8px 20px 36px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{padding:17px}main{margin-top:15px}.row{grid-template-columns:1fr 1fr}header{padding:20px 17px}h1{font-size:20px}.preview{padding:17px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div><div class="brand">LET ME PLAY · CONTENT STUDIO</div><h1>렛미플레이 블로그 자동 글쓰기</h1><p>행사 경험을 블로그 글로 · AI 원고 · 제목 · 태그 · 이미지 구성까지</p></div><span class="pill">관리자 전용</span></div></header>
+<main><div class="layout">
+<div class="stack">
+<section class="panel stack"><h2>① AI 연결</h2><label>관리자 인증키<input type="password" id="adminKey" autocomplete="off" placeholder="운명서 관리자 인증키 입력"></label><div class="actions"><button class="btn small alt" id="checkKey">연결 확인</button><button class="btn small line" id="forgetKey">인증 해제</button></div><div class="muted">인증키는 저장하지 않고 이 탭이 열린 동안에만 사용해. AI 글 생성 시 기존 OpenAI API 비용이 발생할 수 있어.</div><div id="authState" class="status" role="status"></div></section>
+<section class="panel stack"><div class="grid-head"><h2>② 콘텐츠 만들기</h2><button class="btn small alt" id="suggest">주제 추천</button></div>
+<div class="row"><label>행사 분야<select id="category"><option>기업 송년회</option><option>기업 워크숍</option><option>초등학교 운동회</option><option>학교 발표회</option><option>가족 운동회</option><option>지역 축제</option><option>기업 체육대회</option><option>행사 MC 섭외</option><option>음향·조명·포토부스</option><option>교회 행사</option></select></label>
+<label>글 스타일<select id="style"><option>정보 가이드</option><option>체크리스트</option><option>프로그램 아이디어</option><option>비교·선택 팁</option><option>현장 후기</option></select></label></div>
+<div class="row"><label>주요 고객<select id="audience"><option>기업 행사 담당자</option><option>학교 선생님</option><option>학부모회</option><option>지자체 행사 담당자</option><option>교회 행사 담당자</option><option>일반 고객</option></select></label><label>지역<input id="city" value="서울·경기" placeholder="예: 서울, 수원"></label></div>
+<label>핵심 키워드 / 글 주제<input id="keyword" placeholder="예: 송년회 레크리에이션 진행 순서"></label>
+<label>실제 행사 경험 / 메모<textarea id="evidence" rows="4" placeholder="실제로 진행한 행사 날짜·장소·인원·진행 내용·예상 밖 상황 등을 적어줘. 없으면 비워두면 돼. AI가 경험을 지어내지 않게 했어."></textarea></label>
+<label>제공 서비스<input id="services" value="행사 MC, 레크리에이션, 음향, 조명, 포토부스, 행사 기획"></label>
+<div class="row"><label>브랜드명<input id="brand" value="렛미플레이"></label><label>원고 분량<select id="length"><option value="short">기본 1,100~1,500자</option><option value="long">상세 1,800~2,300자</option></select></label></div>
+<label>말투<select id="tone"><option>친근하지만 신뢰감 있는 실무자 말투</option><option>현장 경험 많은 전문 MC의 담백한 말투</option><option>학교 선생님에게 설명하는 친절한 말투</option><option>기업 담당자에게 제안하는 전문적인 말투</option></select></label>
+<button class="btn" id="generate">✨ AI 블로그 원고 만들기</button><div class="status" id="generateState" role="status"></div></section>
+<section class="panel stack"><div class="grid-head"><h2>③ 발행 일정 아이디어</h2><button class="btn small line" id="copySchedule">4주 일정 복사</button></div><div id="schedule" class="history"></div><div class="muted">4주치 주제 제안이야. 여기서 선택하면 입력창이 채워져. 자동 예약 발행 기능은 아니야.</div></section>
+</div>
+<div class="stack">
+<section class="panel stack"><div class="grid-head"><h2>완성된 글</h2><span class="pill" id="draftTag">새 초안 없음</span></div>
+<div class="actions"><button class="btn small alt" id="copyAll" disabled>글 전체 복사</button><button class="btn small alt" id="copyTitle" disabled>제목 복사</button><button class="btn small alt" id="copyTags" disabled>태그 복사</button><button class="btn small line" id="download" disabled>텍스트 저장</button></div>
+<div class="preview" id="preview"><p class="placeholder">왼쪽에서 분야와 키워드를 정하고<br>AI 원고 만들기를 눌러줘.</p></div>
+<div id="extras" hidden><div class="hint-title">추천 사진 배치</div><ul id="imageIdeas" class="checkline"></ul><div class="hint-title">게시 전 사실 확인</div><ul id="factCheck" class="checkline"></ul></div>
+<div class="subtle">✅ 네이버 블로그에는 복사해서 직접 게시해. 사진, 실제 행사 후기, 날짜, 장소와 비용은 게시 전에 확인해 줘. 네이버 자동 로그인·무단 발행 프로그램은 포함하지 않았어.</div></section>
+<section class="panel stack"><div class="grid-head"><h2>내 글 보관함</h2><span class="counter" id="count">0개</span></div><div id="history" class="history"><p class="muted">아직 저장한 원고가 없어.</p></div><div class="actions"><button class="btn small line" id="exportAll">전체 초안 백업</button><button class="btn small line" id="clearAll">보관함 비우기</button></div><div class="muted">원고는 지금 사용하는 브라우저에 저장돼. 다른 기기에서 보려면 백업 파일을 받아야 해. 공용 기기라면 주의해 줘.</div></section>
+</div></div></main><footer>LET ME PLAY · 블로그 글쓰기 도구 · AI 초안은 사실관계 검토 후 게시하세요.</footer>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const WORKER="https://oksoon-grandma-chat.dongyon28.workers.dev";
+const STORE="letmeplay_blog_drafts_v1";
+let key="",active=null;
+const topics=[
+ ["기업 송년회","회사 송년회 게임 5가지, 팀별로 즐기는 법","기업 행사 담당자","프로그램 아이디어"],
+ ["초등학교 운동회","초등학교 운동회 진행 순서와 준비물 체크리스트","학교 선생님","체크리스트"],
+ ["학교 발표회","방과후 발표회 사회자 멘트와 마이크 준비 포인트","학교 선생님","정보 가이드"],
+ ["기업 워크숍","기업 워크숍 팀빌딩 프로그램 고르는 기준","기업 행사 담당자","비교·선택 팁"],
+ ["가족 운동회","가족 운동회 어린이부터 어른까지 참여하는 게임","일반 고객","프로그램 아이디어"],
+ ["지역 축제","지역 축제 야외무대 사회자 운영 체크포인트","지자체 행사 담당자","체크리스트"],
+ ["기업 체육대회","기업 체육대회 MC 섭외 전에 확인할 7가지","기업 행사 담당자","정보 가이드"],
+ ["음향·조명·포토부스","학예회 핀마이크와 무선마이크 준비 시 주의할 점","학교 선생님","정보 가이드"],
+ ["행사 MC 섭외","송년회 MC 섭외비보다 먼저 확인할 것","기업 행사 담당자","비교·선택 팁"],
+ ["교회 행사","교회 전도축제 진행표와 가족 참여 프로그램","교회 행사 담당자","체크리스트"],
+ ["기업 송년회","직원 50명 송년회 레크리에이션 구성 방법","기업 행사 담당자","정보 가이드"],
+ ["학교 발표회","학부모가 참석하는 학교 발표회 진행 체크리스트","학교 선생님","체크리스트"]
+];
+function setStatus(id,text,error){$(id).textContent=text;$(id).classList.toggle("error",!!error);}
+function dateOf(n){const d=new Date();d.setDate(d.getDate()+n);return (d.getMonth()+1)+"월 "+d.getDate()+"일";}
+function fillTopic(t){$("category").value=t[0];$("keyword").value=t[1];$("audience").value=t[2];$("style").value=t[3];$("keyword").focus();window.scrollTo({top:200,behavior:"smooth"});}
+function makeSchedule(){const box=$("schedule");box.replaceChildren();topics.slice(0,8).forEach((t,i)=>{let b=document.createElement("button");b.className="history-item";let label=document.createElement("strong");label.textContent=""+dateOf(i*3)+" · "+t[1];let sub=document.createElement("small");sub.textContent=t[0]+" / "+t[3];b.append(label,sub);b.onclick=()=>fillTopic(t);box.append(b);});}
+function value(){return {category:$("category").value,style:$("style").value,audience:$("audience").value,city:$("city").value,keyword:$("keyword").value,evidence:$("evidence").value,services:$("services").value,brand:$("brand").value,length:$("length").value,tone:$("tone").value};}
+function read(){try{let d=JSON.parse(localStorage.getItem(STORE)||"[]");return Array.isArray(d)?d:[]}catch{return []}}
+function save(d){try{localStorage.setItem(STORE,JSON.stringify(d.slice(0,80)));return true}catch{setStatus("generateState","브라우저 저장 공간이 부족해. 복사하거나 다운로드해 줘.",true);return false}}
+function content(d){if(!d)return "";let s=[d.title,"",d.intro];for(const x of d.sections||[])s.push("","\u25a0 "+(x.heading||""),x.body||"");s.push("","\u25a0 문의 안내",d.cta||"");s.push("","태그: "+(d.tags||[]).map(x=>"#"+x.replace(/^#/,"")).join(" "));return s.join("\n").trim();}
+function tagText(d){return (d.tags||[]).map(x=>"#"+x.replace(/^#/,"")).join(" ")}
+function draw(d){active=d;const box=$("preview");box.replaceChildren();const title=document.createElement("h3");title.textContent=d.title;box.append(title);function p(text){const el=document.createElement("p");el.textContent=text;box.append(el)}p(d.intro);for(const sec of d.sections||[]){const h=document.createElement("h4");h.textContent=sec.heading;box.append(h);p(sec.body)}const call=document.createElement("h4");call.textContent="문의 안내";box.append(call);p(d.cta||"");const tags=document.createElement("p");tags.style.color="#466b9b";tags.textContent=tagText(d);box.append(tags);$("draftTag").textContent=d.created||"완성";$("extras").hidden=false;for(const [id,arr] of [["imageIdeas",d.imageIdeas],["factCheck",d.factCheck]]){const el=$(id);el.replaceChildren();for(const t of arr||[]){const li=document.createElement("li");li.textContent=t;el.append(li)}}for(const b of ["copyAll","copyTitle","copyTags","download"])$(b).disabled=false;}
+function history(){const items=read();$("count").textContent=items.length+"개";const root=$("history");root.replaceChildren();if(!items.length){let p=document.createElement("p");p.className="muted";p.textContent="아직 저장된 원고가 없어.";root.append(p)}for(const d of items){let b=document.createElement("button");b.className="history-item";let title=document.createElement("strong");title.textContent=d.title;let date=document.createElement("small");date.textContent=(d.created||"")+" · "+(d.category||"");b.append(title,date);b.onclick=()=>draw(d);root.append(b)}}
+function download(filename,text){const blob=new Blob([text],{type:"text/plain;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),800);}
+async function copy(t){try{await navigator.clipboard.writeText(t);setStatus("generateState","복사했어! 네이버 블로그 글쓰기 창에 붙여넣으면 돼.")}catch{setStatus("generateState","복사 권한이 없으면 텍스트 파일로 저장해 줘.",true)}}
+$("checkKey").onclick=async()=>{const candidate=$("adminKey").value.trim();if(!candidate)return setStatus("authState","관리자 인증키를 입력해 줘.",true);setStatus("authState","서버에 연결 확인 중…");try{const r=await fetch(WORKER+"/api/admin/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({adminKey:candidate}),signal:AbortSignal.timeout(16000)});const d=await r.json();if(!r.ok||!d.admin)throw Error(d.error||"인증할 수 없어.");key=candidate;$("adminKey").value="";setStatus("authState","✓ 관리자 인증 완료. AI 원고를 만들 수 있어.")}catch(e){key="";setStatus("authState",e.message||"연결 오류",true)}};
+$("forgetKey").onclick=()=>{key="";$("adminKey").value="";setStatus("authState","인증을 해제했어.")};
+$("generate").onclick=async()=>{
+ if(!key)return setStatus("generateState","① 먼저 관리자 인증을 해줘.",true);
+ const input=value();if(!input.keyword.trim())return setStatus("generateState","② 핵심 키워드 또는 글 주제를 입력해 줘.",true);
+ const button=$("generate");button.disabled=true;setStatus("generateState","AI가 실제 블로그 초안을 작성하고 있어…");
+ try{
+  const response=await fetch(WORKER+"/api/blog-draft",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({adminKey:key,...input}),signal:AbortSignal.timeout(60000)});
+  const d=await response.json().catch(()=>({}));
+  if(!response.ok||!d.draft)throw Error(d.error||"서버에서 글을 받아오지 못했어.");
+  const draft={...d.draft,created:new Date().toLocaleString("ko-KR"),category:input.category,id:Date.now()};
+  draw(draft);save([draft,...read()]);history();
+  setStatus("generateState","글 생성 완료! 사실과 사진만 확인하고 네이버에 게시하면 돼.");
+ }catch(e){setStatus("generateState",e.message||"생성 실패",true)}finally{button.disabled=false}
+};
+$("suggest").onclick=()=>fillTopic(topics[Math.floor(Math.random()*topics.length)]);
+$("copyAll").onclick=()=>active&&copy(content(active));$("copyTitle").onclick=()=>active&&copy(active.title);$("copyTags").onclick=()=>active&&copy(tagText(active));
+$("download").onclick=()=>active&&download("렛미플레이_블로그원고_"+(active.id||Date.now())+".txt",content(active));
+$("copySchedule").onclick=()=>copy(topics.slice(0,8).map((t,i)=>dateOf(i*3)+" | "+t[1]+" | "+t[0]).join("\n"));
+$("exportAll").onclick=()=>download("렛미플레이_블로그_전체백업.json",JSON.stringify(read(),null,2));
+$("clearAll").onclick=()=>{if(confirm("이 브라우저에 저장된 초안을 모두 지울까? 백업을 먼저 받아줘.")){localStorage.removeItem(STORE);history();}};
+makeSchedule();history();
+})();
+</script></body></html>
