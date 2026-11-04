@@ -370,6 +370,7 @@ header{position:relative}
 <section id="oksoonLoader" class="oksoon-loader hidden" role="status" aria-live="polite"><div class="oksoon-loader-in"><img src="./assets/oksoon-portrait.jpg?v=26" alt="" aria-hidden="true"><div class="eyebrow">진도 정옥순 할머니 · 사주 살펴보는 중</div><h2 id="oksoonLoadingLine">“어디… 자네 사주부터 보자꾸나.”</h2><div class="oksoon-bar"><span></span></div><p>잠시만 기다려 보게. 자네 사주를 찬찬히 살펴보고 있네.</p><div class="oksoon-review-samples"><div class="oksoon-review-label">자네 사주에서 먼저 읽힌 다섯 가지</div><div id="oksoonReviewList" aria-live="off"></div></div></div></section>
 <div class="steps" id="progress" aria-label="진행 단계"></div>
 <section class="page active card" id="page1">
+ <section id="reportAdminAuth" class="report-admin-auth" aria-label="관리자용 인증 영역" hidden></section>
  <div class="eyebrow">01 / 05 · 사주 맡기기</div><h2>자네 팔자에 아직 모르는 이야기가 있네.</h2>
  <p>태어난 생년월일만 알려줘. 할매가 만세력의 연주·월주·일주를 계산해서 보여줄게. 태어난 시간을 알면 시주도 추가해 주마.</p>
  
@@ -446,7 +447,7 @@ header{position:relative}
  <div id="reportPersonality" class="report-personality"></div>
  <div id="reportElement" class="report-element-panel"></div>
  <div class="report-divider">✦　인생의 열 가지 이야기</div>
- <section id="reportAdminAuth" class="report-admin-auth" aria-label="관리자용 인증 영역" hidden></section>
+ 
  <div class="chapter-tabs" id="chapters"></div>
  <div class="chapter-text" id="chapterBody" aria-live="polite"></div>
  <div class="notice">현재는 시험용 풀이이며, 정식 유료 상품은 준비 중이야.</div>
@@ -844,8 +845,8 @@ function renderAdminVerification(){
  const root=$("reportAdminAuth");if(!root||!devPreview)return;
  root.hidden=false;
  root.replaceChildren();
- const heading=make("strong","관리자 · AI 심층 보고서 검수 인증");root.append(heading);
- const desc=make("p","관리자 인증을 완료하면 전체 운명서에서 AI 심층 풀이가 자동으로 추가돼. 고객에게는 이 기능이 보이지 않아.","note");root.append(desc);
+ const heading=make("strong","관리자 모드 · 먼저 인증하고 시작하기");root.append(heading);
+ const desc=make("p","여기서 한 번 인증하면 생년월일을 입력한 뒤 전체 운명서까지 편하게 검수할 수 있어. 일반 고객에게는 보이지 않아.","note");root.append(desc);
  const input=make("input");input.type="password";input.autocomplete="off";input.placeholder="관리자 인증키";input.setAttribute("aria-label","관리자 인증키");root.append(input);
  const button=make("button","관리자 인증하기","secondary");button.type="button";root.append(button);
  const status=make("p","","note");status.setAttribute("role","status");root.append(status);
@@ -857,7 +858,7 @@ function renderAdminVerification(){
    const data=await response.json().catch(()=>({}));
    if(!response.ok||!data.admin)throw Error(data.error||"관리자 인증에 실패했어.");
    adminKey=candidate;input.value="";input.remove();button.remove();
-   status.textContent="관리자 인증 완료 · 전체 운명서의 AI 심층 풀이 자동 생성 준비 완료";
+   status.textContent="인증 완료! 아래에서 생년월일을 입력하면 전체 운명서와 AI 심층 풀이를 확인할 수 있어.";
    if(step===5)activateAutoReports();
   }catch(error){status.textContent=error.message||"인증 서버를 확인해 줘.";button.disabled=false;}
  });
@@ -2666,7 +2667,7 @@ $("begin").addEventListener("click",()=>{
   for(let i=1;i<selectedLines.length;i++)setTimeout(()=>showInsight(i),i*900);
   setTimeout(()=>{
    try{
-    renderManse();person();renderAdminVerification();renderSalesTeasers();
+    renderManse();person();renderSalesTeasers();
     $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";renderEditorialReport();renderFullReport();page(2);
    }catch(err){$("formError").textContent=err.message||"풀이를 준비하지 못했어요.";}
    finally{loader.classList.add("hidden");oksoonBusy=false;$("begin").disabled=false;}
@@ -2678,6 +2679,7 @@ chapterNames.forEach((name,i)=>{const b=make("button",name,"chapter");b.type="bu
 $("salesGoOffer").addEventListener("click",()=>page(4));
 $("back").addEventListener("click",()=>page(step-1));
 $("next").addEventListener("click",()=>{if(step===5){state=null;page(1);}else page(step+1);});
+renderAdminVerification();
 page(1);
 })();
 </script>
