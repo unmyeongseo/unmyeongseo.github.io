@@ -1,0 +1,11 @@
+name = "oksoon-grandma-chat"
+main = "backend/src/index.js"
+compatibility_date = "2026-11-03"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "oksoon-chat"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[vars]
+OPENAI_MODEL = "gpt-4.1-mini"
